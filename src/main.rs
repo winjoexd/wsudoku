@@ -16,7 +16,7 @@ mod gameboard_view;
 
 fn main() {
     let opengl = OpenGL::V3_2;
-    let settings = WindowSettings::new("WSudoku", (640, 480))
+    let settings = WindowSettings::new("WSudoku", (640, 640))
         .exit_on_esc(true)
         .graphics_api(opengl)
         .vsync(true);
@@ -30,7 +30,11 @@ fn main() {
     let gameboard_view = GameboardView::new(gameboard_view_settings);
 
     while let Some(e) = events.next(&mut window) {
-        gameboard_controller.event(&e);
+        gameboard_controller.event(
+            gameboard_view.settings.position,
+            gameboard_view.settings.size,
+            &e,
+        );
         if let Some(args) = e.render_args() {
             gl.draw(args.viewport(), |c, g| {
                 use graphics::clear;
